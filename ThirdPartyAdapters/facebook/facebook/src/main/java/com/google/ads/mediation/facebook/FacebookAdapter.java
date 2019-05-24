@@ -98,6 +98,7 @@ public final class FacebookAdapter extends FacebookMediationAdapter
      * A Facebook {@link MediaView} used to show native ad media content.
      */
     private MediaView mMediaView;
+    private String TAG="Local FacebookAdapter";
 
     //region MediationAdapter implementation.
     @Override
@@ -512,8 +513,54 @@ public final class FacebookAdapter extends FacebookMediationAdapter
             Log.d(TAG, "onMediaDownloaded");
         }
     }
+	
+	    private com.facebook.ads.AdSize getAdSize(Context context, AdSize adSize) {
 
-    private com.facebook.ads.AdSize getAdSize(Context context, AdSize adSize) {
+        ArrayList<AdSize> potentials = new ArrayList<AdSize>(3);
+        potentials.add(0, new AdSize(adSize.getWidth(), 50));
+        potentials.add(1, new AdSize(adSize.getWidth(), 90));
+        potentials.add(2, new AdSize(adSize.getWidth(), 250));
+        Log.i(TAG, "Potential ad sizes: " + potentials.toString());
+        AdSize closestSize = findClosestSize(context, adSize, potentials);
+        if (closestSize == null) {
+            return null;
+        }
+        Log.i(TAG, "Found closest ad size: " + closestSize.toString());
+
+        if (closestSize.getWidth() == com.facebook.ads.AdSize.BANNER_320_50.getWidth()
+                && closestSize.getHeight() == com.facebook.ads.AdSize.BANNER_320_50.getHeight()) {
+            return com.facebook.ads.AdSize.BANNER_320_50;
+        }
+
+        int adHeight = closestSize.getHeight();
+        if (adHeight == com.facebook.ads.AdSize.BANNER_HEIGHT_50.getHeight()) {
+            return com.facebook.ads.AdSize.BANNER_HEIGHT_50;
+        }
+
+        if (adHeight == com.facebook.ads.AdSize.BANNER_HEIGHT_90.getHeight()) {
+            return com.facebook.ads.AdSize.BANNER_HEIGHT_90;
+        }
+
+        if (adHeight == com.facebook.ads.AdSize.RECTANGLE_HEIGHT_250.getHeight()) {
+            return com.facebook.ads.AdSize.RECTANGLE_HEIGHT_250;
+        }
+        if ((adSize.getWidth() == com.facebook.ads.AdSize.BANNER_320_50.getWidth()) &&
+                (adSize.getHeight() == com.facebook.ads.AdSize.BANNER_320_50.getHeight())) {
+            return com.facebook.ads.AdSize.BANNER_320_50;
+        }
+        if (adSize.isFullWidth() && adHeight == com.facebook.ads.AdSize.BANNER_HEIGHT_50.getHeight()) {
+            Log.d(TAG,"adSize.isFullWidth() && adHeight == com.facebook.ads.AdSize.BANNER_HEIGHT_50.getHeight()");
+            return com.facebook.ads.AdSize.BANNER_HEIGHT_50;
+        }
+        if (adSize.isFullWidth() && adHeight == com.facebook.ads.AdSize.BANNER_HEIGHT_90.getHeight()) {
+            Log.d(TAG,"adSize.isFullWidth() && adHeight == com.facebook.ads.AdSize.BANNER_HEIGHT_90.getHeight()");
+            return com.facebook.ads.AdSize.BANNER_HEIGHT_90;
+        }
+        return null;
+    }
+
+
+    /*private com.facebook.ads.AdSize getAdSize(Context context, AdSize adSize) {
 
     ArrayList<AdSize> potentials = new ArrayList<AdSize>(3);
     potentials.add(0, new AdSize(adSize.getWidth(), 50));
@@ -545,6 +592,7 @@ public final class FacebookAdapter extends FacebookMediationAdapter
         }
         return null;
     }
+	*/
 
   // Start of helper code to remove when available in SDK
   /**
