@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
+import com.facebook.ads.BuildConfig;
 import com.facebook.ads.RewardedVideoAd;
 import com.facebook.ads.RewardedVideoAdListener;
 import com.google.android.gms.ads.mediation.Adapter;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class FacebookMediationAdapter extends Adapter implements MediationRewardedAd {
 
-    static final String TAG = FacebookAdapter.class.getSimpleName();
+	static final String TAG = "Local FacebookAdapter FacebookMediationAdapter";
 
     static final String PLACEMENT_PARAMETER = "pubid";
 
