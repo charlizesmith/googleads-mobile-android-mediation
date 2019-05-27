@@ -138,8 +138,10 @@ public final class FacebookAdapter extends FacebookMediationAdapter
                                 final MediationAdRequest adRequest,
                                 Bundle mediationExtras) {
         mBannerListener = listener;
+	   Log.d(TAG, "requestBannerAd");
         if (!isValidRequestParameters(context, serverParameters)) {
       if (mBannerListener != null) {
+        Log.w(TAG, "requestBannerAd");
         mBannerListener.onAdFailedToLoad(
             FacebookAdapter.this, AdRequest.ERROR_CODE_INVALID_REQUEST);
       }
@@ -166,13 +168,16 @@ public final class FacebookAdapter extends FacebookMediationAdapter
             @Override
             public void onInitializeSuccess() {
                 createAndLoadBannerAd(context, placementId, adSize, adRequest);
+		  Log.d(TAG," mBannerListener onInitializeSuccess");
             }
 
             @Override
             public void onInitializeError(String message) {
+	    Log.d(TAG,"mBannerListener onInitializeError");
                 Log.w(TAG, "Failed to load ad from Facebook: " + message);
                 if (mBannerListener != null) {
-                    mBannerListener.onAdFailedToLoad(FacebookAdapter.this,
+    Log.d(TAG,"mBannerListener onInitializeSuccess onInitializeError");
+    mBannerListener.onAdFailedToLoad(FacebookAdapter.this,
                             AdRequest.ERROR_CODE_INTERNAL_ERROR);
                 }
             }
@@ -204,13 +209,16 @@ public final class FacebookAdapter extends FacebookMediationAdapter
                 new FacebookInitializer.Listener() {
             @Override
             public void onInitializeSuccess() {
+	      Log.d(TAG,"Interstitial onInitializeSuccess");
                 createAndLoadInterstitial(context, placementId, adRequest);
             }
 
             @Override
             public void onInitializeError(String message) {
+	        Log.d(TAG,"Interstitial onInitializeError");
                 Log.w(TAG, "Failed to load ad from Facebook: " + message);
                 if (mInterstitialListener != null) {
+		    Log.d(TAG,"Interstitial onInitializeSuccess onAdFailedToLoad");
                     mInterstitialListener.onAdFailedToLoad(FacebookAdapter.this,
                             AdRequest.ERROR_CODE_INTERNAL_ERROR);
                 }
